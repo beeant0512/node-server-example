@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>500 - Internal Error</title>
+</head>
+<body>
+<h1>${error.name}: ${error.message}</h1>
+<p>An internal error has occured with the following call stack:</p>
+<pre>error.stack</pre>
+<p>This error was logged, but can be reported <a href="${bugs}" target="_blank">here</a>.</p>
+
+<footer>
+    include serversig
+</footer>
+</body>
+</html>

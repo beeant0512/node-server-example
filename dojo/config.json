@@ -1,0 +1,9 @@
+{
+	"development": {
+		"logging": {
+			"enabled": 1
+		},
+		"port": 8002,
+		"libRoot": "src"
+	}
+}
