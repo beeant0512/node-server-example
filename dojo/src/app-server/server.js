@@ -1,4 +1,6 @@
 define([
+  "dojo/node!fs",
+  "dojo/node!path",
   'dojo/node!express',
   'dojo/node!compression',
   'dojo/node!morgan',
@@ -10,9 +12,10 @@ define([
   'dojo/node!stylus',
   'dojo/node!nib',
   'dojo/node!colors',
-  'app-server/config'
-], function (express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
-             colors, config) {
+  'app-server/config',
+  'app-server/routes'
+], function (fs, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
+             colors, config, routes) {
 
   function compile(str, path) {
     return stylus(str).set('filename', path).use(nib());
@@ -32,8 +35,8 @@ define([
       fn(null, str);
     });
   });
-
-  app.set('views', 'views');
+  var __dirname = path.resolve();
+  app.set('views', path.join(__dirname, 'views'));
   app.use(compress());
   app.use(morgan(env === 'production' ? 'combined' : 'dev'));
   app.use(cookieParser());
@@ -57,12 +60,11 @@ define([
     next(new Error('All your base are belong to us!'));
   });
 
-  // Main document handler
   app.get('/*', function (request, response, next) {
     if (request.params[0] == '404' || /^_static/.test(request.params[0]) || /^src/.test(request.params[0])) {
       next();
     } else {
-      request.render('index', {title: 'Login'});
+      response.render(request._parsedUrl.pathname.substring(1), request.query);
     }
   });
 
