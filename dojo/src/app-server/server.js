@@ -18,7 +18,6 @@ define([
 ], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
              expressEjs, colors, config) {
 
-
   /* Express Application */
   var app = express(),
     appPort = process.env.PORT || config.port || 8002,
@@ -30,7 +29,7 @@ define([
     return stylus(str).set('filename', path).use(nib());
   }
 
-  console.log("running mode :" + env);
+  console.log("server config:", config);
   // Configure the application
   app.set('view engine', 'html');
   app.engine('html', function (path, options, fn) {
@@ -93,11 +92,13 @@ define([
   app.post('/*', function (req, res) {
     if (env == "local") {
       console.log("return local json ");
-      console.log(path.join(__dirname, 'data', req.path + '.json'));
-      res.sendFile(path.join(__dirname, 'data', req.path + '.json'))
+      // if do login, session the user data
+      console.log(req.path, config.server.login);
+      if (req.path == config.server.login) {
+        req.session.user = {'username': 'admin', 'userId': "1", "gender": "m"};
+      }
+      res.sendFile(path.join(__dirname, 'data', req.path + '.json'));
     } else {
-      var headers = req.headers;
-      headers.host = 'localhost';
       var options = {
         hostname: config.server.hostname,
         port: config.server.port,
@@ -111,18 +112,20 @@ define([
       req.on("data", function (data) {
         var request = http.request(options, function (response) {
           response.on('data', function (chunk) {
+            // if do login, session the user data
+            if (req.path == config.server.login) {
+              req.session.user = chunk;
+            }
             body.push(chunk);
           }).on("end", function () {
-            //返回给前台
+            // return to web
             body = Buffer.concat(body);
-            res.write(body);
-            res.end();
+            res.write(body).end();
           });
         }).on('error', function (e) {
           res.status(500).send({error: 'Error ', data: e});
         });
-        request.write(data + "\n");
-        request.end();
+        request.write(data + "\n").end();
       });
     }
   });

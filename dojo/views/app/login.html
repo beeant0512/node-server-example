@@ -85,7 +85,6 @@
 <script>
   require(["dojo/ready"], function (ready) {
     ready(function () {
-
       var $loginForm = $('#loginForm');
       $loginForm
         .formValidation({
@@ -120,6 +119,8 @@
               if (!msg.success) {
                 fv.updateMessage('password', 'notEmpty', msg.msg)
                   .updateStatus('password', 'INVALID');
+              } else {
+
               }
             }
           })

@@ -3,7 +3,6 @@ var loadModule = "app-server/server";
 
 // Configuration Object for Dojo Loader:
 dojoConfig = {
-
   baseUrl: "assets/dojo", // Where we will put our packages
   async: 1, // We want to make sure we are using the "modern" loader
   hasCache: {
@@ -21,7 +20,7 @@ dojoConfig = {
     },
     {
       name: "app",
-      location: "app"
+      location: "../../src/app"
     },
     {
       name: "app-server",

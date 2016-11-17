@@ -1,3 +1,12 @@
 {
-  "status":"success"
+  "success": true,
+  "data": [
+    {
+      "username": "admin",
+      "gender": "m",
+      "userId": "1"
+    }
+  ],
+  "msg": [],
+  "code": 0
 }

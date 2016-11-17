@@ -12,7 +12,25 @@
     "server": {
       "hostname": "localhost",
       "port": "8089",
-      "content": "/api"
+      "content": "/api",
+      "login": "/user/login"
+    }
+  },
+  "local": {
+    "logging": {
+      "enabled": 1
+    },
+    "port": 8002,
+    "libRoot": "src",
+    "app": {
+      "login": "app/login",
+      "index": "app/index"
+    },
+    "server": {
+      "hostname": "localhost",
+      "port": "8089",
+      "content": "/api",
+      "login": "/user/login"
     }
   },
   "preprod": {
@@ -23,7 +41,8 @@
     "libRoot": "src",
     "app": {
       "login": "app/login",
-      "index": "app/index"
+      "index": "app/index",
+      "login": "/user/login"
     },
     "server": {
       "hostname": "localhost",
@@ -44,7 +63,8 @@
     "server": {
       "hostname": "localhost",
       "port": "8089",
-      "content": "/api"
+      "content": "/api",
+      "login": "/user/login"
     }
   }
 }
