@@ -18,15 +18,19 @@ define([
 ], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
              expressEjs, colors, config) {
 
-  function compile(str, path) {
-    return stylus(str).set('filename', path).use(nib());
-  }
 
   /* Express Application */
   var app = express(),
     appPort = process.env.PORT || config.port || 8002,
-    env = process.env.NODE_ENV || 'development';
+    env = process.env.NODE_ENV || 'development',
+    __dirname = path.resolve(),
+    serveStaticAry = ['/_static', '/assets', '/src', 'lib'];
 
+  function compile(str, path) {
+    return stylus(str).set('filename', path).use(nib());
+  }
+
+  console.log("running mode :" + env);
   // Configure the application
   app.set('view engine', 'html');
   app.engine('html', function (path, options, fn) {
@@ -36,25 +40,21 @@ define([
       fn(null, str);
     });
   });
-  var __dirname = path.resolve();
   app.set('views', path.join(__dirname, 'views'));
   app.use(compress());
   app.use(morgan(env === 'production' ? 'combined' : 'dev'));
   app.use(cookieParser());
   app.use(cookieSession({secret: 'sUyC2IAOnzPpfjHRjSDpUUgQvmANfW9i3dOeNtqChnj6iMG5BzK1n3vjZkrW'}));
   app.use(favicon('./_static/favicon.ico'));
-
   app.use(stylus.middleware({
     src: '.',
     compile: compile,
     compress: true
   }));
 
-  var serveStaticAry = ['/_static', '/assets', '/src', 'lib'];
   for (var i = 0; i < serveStaticAry.length; i++) {
     app.use(serveStaticAry[i], serveStatic('.' + serveStaticAry[i]));
   }
-
 
   app.get('/500', function (request, response, next) {
     next(new Error('All your base are belong to us!'));
@@ -91,36 +91,40 @@ define([
    */
   // all post method
   app.post('/*', function (req, res) {
-    var headers = req.headers;
-    headers.host = 'localhost';
-    var options = {
-      hostname: config.server.hostname,
-      port: config.server.port,
-      path: config.server.content + req.url,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
-    var body = [];
-    req.on("data", function (data) {
-      console.log(data);
-      var request = http.request(options, function (response) {
-        response.on('data', function (chunk) {
-          body.push(chunk);
-        }).on("end", function () {
-          //返回给前台
-          body = Buffer.concat(body);
-          res.write(body);
-          res.end();
+    if (env == "local") {
+      console.log("return local json ");
+      console.log(path.join(__dirname, 'data', req.path + '.json'));
+      res.sendFile(path.join(__dirname, 'data', req.path + '.json'))
+    } else {
+      var headers = req.headers;
+      headers.host = 'localhost';
+      var options = {
+        hostname: config.server.hostname,
+        port: config.server.port,
+        path: config.server.content + req.url,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      };
+      var body = [];
+      req.on("data", function (data) {
+        var request = http.request(options, function (response) {
+          response.on('data', function (chunk) {
+            body.push(chunk);
+          }).on("end", function () {
+            //返回给前台
+            body = Buffer.concat(body);
+            res.write(body);
+            res.end();
+          });
+        }).on('error', function (e) {
+          res.status(500).send({error: 'Error ', data: e});
         });
-      }).on('error', function (e) {
-        res.send({error: 'Error ', data: e});
+        request.write(data + "\n");
+        request.end();
       });
-
-      request.write(data + "\n");
-      request.end();
-    });
+    }
   });
 
   app.use(function (request, response, next) {
