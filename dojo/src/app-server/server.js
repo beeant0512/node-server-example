@@ -1,5 +1,6 @@
 define([
   "dojo/node!fs",
+  "dojo/node!http",
   "dojo/node!path",
   'dojo/node!express',
   'dojo/node!compression',
@@ -11,11 +12,11 @@ define([
   'dojo/node!juicer',
   'dojo/node!stylus',
   'dojo/node!nib',
+  'dojo/node!express-ejs-layouts',
   'dojo/node!colors',
-  'app-server/config',
-  'app-server/routes'
-], function (fs, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
-             colors, config, routes) {
+  'app-server/config'
+], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
+             expressEjs, colors, config) {
 
   function compile(str, path) {
     return stylus(str).set('filename', path).use(nib());
@@ -49,23 +50,77 @@ define([
     compress: true
   }));
 
-  app.use('/_static', serveStatic('./_static'));
-  app.use('/src', serveStatic('./src'));
-  app.use('/lib', serveStatic('./lib'));
+  var serveStaticAry = ['/_static', '/assets', '/src', 'lib'];
+  for (var i = 0; i < serveStaticAry.length; i++) {
+    app.use(serveStaticAry[i], serveStatic('.' + serveStaticAry[i]));
+  }
 
-  // app routes
-  // app.use('/', routes);
 
   app.get('/500', function (request, response, next) {
     next(new Error('All your base are belong to us!'));
   });
 
+  /**
+   * local request
+   */
+  // GET method route
   app.get('/*', function (request, response, next) {
-    if (request.params[0] == '404' || /^_static/.test(request.params[0]) || /^src/.test(request.params[0])) {
+    if (request.params[0] == '404'
+      || /^_static/.test(request.params[0])
+      || /^assets/.test(request.params[0])
+      || /^src/.test(request.params[0])) {
       next();
     } else {
-      response.render(request._parsedUrl.pathname.substring(1), request.query);
+      /**
+       * 没有登录，跳转登录页面
+       */
+      if (!request.session.user) {
+        response.render(config.app.login, request.query);
+      } else {
+        var pathname = request._parsedUrl.pathname;
+        if (pathname.substring(0, 1) == "/") {
+          pathname = pathname.substring(1);
+        }
+        response.render(pathname, request.query);
+      }
     }
+  });
+
+  /**
+   * route to remote server
+   */
+  // all post method
+  app.post('/*', function (req, res) {
+    var headers = req.headers;
+    headers.host = 'localhost';
+    var options = {
+      hostname: config.server.hostname,
+      port: config.server.port,
+      path: config.server.content + req.url,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+    var body = [];
+    req.on("data", function (data) {
+      console.log(data);
+      var request = http.request(options, function (response) {
+        response.on('data', function (chunk) {
+          body.push(chunk);
+        }).on("end", function () {
+          //返回给前台
+          body = Buffer.concat(body);
+          res.write(body);
+          res.end();
+        });
+      }).on('error', function (e) {
+        res.send({error: 'Error ', data: e});
+      });
+
+      request.write(data + "\n");
+      request.end();
+    });
   });
 
   app.use(function (request, response, next) {
@@ -81,6 +136,7 @@ define([
     response.type('text').send('Not Found');
   });
 
+  // error handler
   app.use(function (error, request, response, next) {
     response.status(error.status || 500);
     if (request.accepts('html')) {

@@ -1,0 +1,50 @@
+{
+  "development": {
+    "logging": {
+      "enabled": 1
+    },
+    "port": 8002,
+    "libRoot": "src",
+    "app": {
+      "login": "app/login",
+      "index": "app/index"
+    },
+    "server": {
+      "hostname": "localhost",
+      "port": "8089",
+      "content": "/api"
+    }
+  },
+  "preprod": {
+    "logging": {
+      "enabled": 1
+    },
+    "port": 8002,
+    "libRoot": "src",
+    "app": {
+      "login": "app/login",
+      "index": "app/index"
+    },
+    "server": {
+      "hostname": "localhost",
+      "port": "8089",
+      "content": "/api"
+    }
+  },
+  "product": {
+    "logging": {
+      "enabled": 1
+    },
+    "port": 8002,
+    "libRoot": "src",
+    "app": {
+      "login": "app/login",
+      "index": "app/index"
+    },
+    "server": {
+      "hostname": "localhost",
+      "port": "8089",
+      "content": "/api"
+    }
+  }
+}
