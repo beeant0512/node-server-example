@@ -3,8 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+
+    <link rel="stylesheet" href="/assets/dojo/themes/flat/flat.css" media="screen">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <style>
+        .headline {
+            height: 100%;
+            width: 100%;
+            min-height: 600px;
+        }
+    </style>
 </head>
-<body>
-welcome!
+<body class="flat">
+<div id="pageContainer" class="headline"
+     data-dojo-type="dijit/layout/BorderContainer"
+     data-dojo-props="design: 'headline'">
+    <div id="topHeader"
+         data-dojo-type="dijit/layout/ContentPane"
+         data-dojo-props="region: 'top'">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"> SpringDojoAdmin</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar">
+                    <!-- menus -->
+                    <ul class="nav navbar-nav" id="topMenu">
+                    </ul>
+                    <textarea id="menuTemplate" style="display: none;">
+                        {% for item in menus %}
+                        <li class="{{item.class}}" data-id="{{item.id}}"><a href="{{item.link}}">{{item.name}}</a></li>
+                        {% endfor %}
+                    </textarea>
+                    <!-- user info-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+    <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region: 'center'" id="tabContainer"></div>
+    <div id="leftSide"
+         data-dojo-type="dijit/layout/ContentPane"
+         data-dojo-props="region: 'left'" style="width:200px;">
+        <div id="leftSideMenu"></div>
+    </div>
+    <div id="rightSide"
+         data-dojo-type="dijit/layout/ContentPane"
+         data-dojo-props="region: 'right'">right side
+    </div>
+    <div id="bottomFotter"
+         data-dojo-type="dijit/layout/ContentPane"
+         data-dojo-props="region: 'bottom'">bottom fotter
+    </div>
+</div>
+
+<!-- load dojo and provide config via data attribute -->
+<script src="/_static/js/dojoConfig.js"></script>
+<script src="/assets/dojo/dojo/dojo.js"></script>
+<script src="/_static/js/app.js"></script>
+<script>
+</script>
 </body>
 </html>
