@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "name": "Demo",
+    "link": "",
+    "class": "active",
+    "children": [
+      {
+        "id": "11",
+        "name": "dgrid",
+        "link": "/demo/dgrid"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Menu2",
+    "link": "",
+    "class": ""
+  }
+]
