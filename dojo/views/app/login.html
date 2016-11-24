@@ -54,7 +54,7 @@
                 <div class="form-group has-feedback has-feedback-left">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                        <input type="text" class="form-control" placeholder="Please enter username" name="username"
+                        <input type="text" class="form-control" placeholder="Please enter username" name="phone"
                                required>
                     </div>
                 </div>
@@ -111,11 +111,14 @@
           var $form = $(e.target),
             fv = $form.data('formValidation'),
             data = $loginForm.serializeArray();
+          console.log(data);
+          console.log(JSON.stringify(data));
           $.ajax({
             type: 'post',
             url: '/user/login',
             data: data,
             success: function (msg) {
+              console.log(msg);
               if (!msg.success) {
                 fv.updateMessage('password', 'notEmpty', msg.msg)
                   .updateStatus('password', 'INVALID');

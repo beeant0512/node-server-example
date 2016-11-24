@@ -111,21 +111,37 @@ define([
       var body = [];
       req.on("data", function (data) {
         var request = http.request(options, function (response) {
+          response.setEncoding('utf8');
           response.on('data', function (chunk) {
             // if do login, session the user data
+            /*
+             * check login status
+             *   if login success, session user
+             *   else do nothing
+             */
             if (req.path == config.server.login) {
-              req.session.user = chunk;
+              var loginRst = JSON.parse(chunk);
+              if (loginRst.success) {
+                console.log("login success");
+                req.session.user = chunk;
+              }
             }
-            body.push(chunk);
+            body.push(new Buffer(chunk));
           }).on("end", function () {
             // return to web
-            body = Buffer.concat(body);
-            res.write(body).end();
+            // return a string
+            // body = Buffer.concat(body);
+            // res.write(body);
+
+            res.contentType('json');//返回的数据类型
+            res.send(body.toString());//给客户端返回一个json格式的数据
+            res.end();
           });
         }).on('error', function (e) {
           res.status(500).send({error: 'Error ', data: e});
         });
-        request.write(data + "\n").end();
+        request.write(data);
+        request.end();
       });
     }
   });
