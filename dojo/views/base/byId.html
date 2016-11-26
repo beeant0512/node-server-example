@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>byId</title>
+</head>
+<body>
+<h1 id="greeting">Hello</h1>
+<pre>
+    &lt;h1 id="greeting"&gt;Hello&lt;/h1&gt;
+</pre>
+<pre>
+    require(['dojo/dom'], function (dom) { <br />
+        dom.byId('greeting'); <br />
+    })
+</pre>
+</body>
+
+<!-- load dojo and provide config via dojoConfig -->
+<script>
+  require(['dojo/dom'], function (dom) {
+      console.log(dom.byId('greeting'));
+  })
+</script>
+</html>

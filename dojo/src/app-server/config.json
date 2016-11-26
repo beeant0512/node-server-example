@@ -11,8 +11,8 @@
     },
     "server": {
       "hostname": "localhost",
-      "port": "8089",
-      "content": "/api",
+      "port": "8180",
+      "content": "/sh/api",
       "login": "/user/login"
     }
   },

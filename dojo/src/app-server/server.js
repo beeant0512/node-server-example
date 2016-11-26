@@ -76,7 +76,8 @@ define([
       if (!request.session.user) {
         response.render(config.app.login, request.query);
       } else {
-        var pathname = request._parsedUrl.pathname;
+        var pathname = request.url;
+        pathname = pathname.replace(';onlybody=true',"");
         if (pathname.substring(0, 1) == "/") {
           pathname = pathname.substring(1);
         }

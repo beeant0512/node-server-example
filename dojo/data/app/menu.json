@@ -1,21 +1,33 @@
 [
   {
     "id": "1",
-    "name": "Demo",
+    "name": "Base",
     "link": "",
     "class": "active",
     "children": [
       {
         "id": "11",
-        "name": "dgrid",
-        "link": "/demo/dgrid"
+        "name": "byId",
+        "link": "/base/byId"
+      },
+      {
+        "id": "12",
+        "name": "fx",
+        "link": "/base/fx"
       }
     ]
   },
   {
     "id": "2",
-    "name": "Menu2",
+    "name": "dGrid",
     "link": "",
-    "class": ""
+    "class": "",
+    "children": [
+      {
+        "id": "21",
+        "name": "dgrid",
+        "link": "/dgrid/dgrid"
+      }
+    ]
   }
 ]
