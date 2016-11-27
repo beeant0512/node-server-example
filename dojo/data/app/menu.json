@@ -29,5 +29,18 @@
         "link": "/dgrid/dgrid"
       }
     ]
+  },
+  {
+    "id": "999",
+    "name": "Example",
+    "link": "",
+    "class": "",
+    "children": [
+      {
+        "id": "998",
+        "name": "flat",
+        "link": "/flat"
+      }
+    ]
   }
 ]
