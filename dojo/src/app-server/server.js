@@ -10,14 +10,14 @@ define([
   'dojo/node!serve-favicon',
   'dojo/node!serve-static',
   'dojo/node!juicer',
+  'dojo/node!markdown',
   'dojo/node!stylus',
   'dojo/node!nib',
   'dojo/node!express-ejs-layouts',
   'dojo/node!colors',
   'app-server/config'
-], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, stylus, nib,
-             expressEjs, colors, config) {
-
+], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, markdown,
+             stylus, nib, expressEjs, colors, config) {
   /* Express Application */
   var app = express(),
     appPort = process.env.PORT || config.port || 8002,
@@ -76,12 +76,23 @@ define([
       if (!request.session.user) {
         response.render(config.app.login, request.query);
       } else {
-        var pathname = request.url;
-        pathname = pathname.replace(';onlybody=true',"");
+        var pathname = request.params[0];
+
         if (pathname.substring(0, 1) == "/") {
           pathname = pathname.substring(1);
         }
-        response.render(pathname, request.query);
+        var md = request.query.md;
+        md = md.replace(';onlybody=true', "");
+        if (md) {
+          console.log("read md file:",path.join(__dirname, 'markdown', request.path + '.md'));
+          var mdFile = fs.read(path.join(__dirname, 'markdown', request.path + '.md'));
+          console.log(mdFile);
+          var html = markdown.makeHtml(mdFile);
+          response.send(html)
+          response.end();
+        } else {
+          response.render(pathname, request.query);
+        }
       }
     }
   });
