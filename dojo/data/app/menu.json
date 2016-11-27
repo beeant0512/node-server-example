@@ -1,30 +1,54 @@
 [
   {
     "id": "1",
-    "name": "Base",
+    "name": "Dojo",
     "link": "",
     "class": "active",
     "children": [
       {
         "id": "11",
         "name": "byId",
-        "link": "/base/byId"
+        "link": "/dojo/byId"
       },
       {
         "id": "12",
         "name": "fx",
-        "link": "/base/fx"
+        "link": "/dojo/fx"
       }
     ]
   },
   {
     "id": "2",
+    "name": "Dijit",
+    "link": "",
+    "class": "active",
+    "children": [
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Dojox",
+    "link": "",
+    "class": "active",
+    "children": [
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Util",
+    "link": "",
+    "class": "active",
+    "children": [
+    ]
+  },
+  {
+    "id": "5",
     "name": "dGrid",
     "link": "",
     "class": "",
     "children": [
       {
-        "id": "21",
+        "id": "51",
         "name": "dgrid",
         "link": "/dgrid/dgrid"
       }
