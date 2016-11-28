@@ -6,14 +6,40 @@
     "class": "active",
     "children": [
       {
-        "id": "11",
-        "name": "byId",
-        "link": "/dojo/byId.md"
+        "id":"11",
+        "name":"Example",
+        "link":"",
+        "class":"",
+        "children":[
+          {
+            "id": "110",
+            "name": "dom",
+            "link": "/dojo/dom"
+          },
+          {
+            "id": "111",
+            "name": "fx",
+            "link": "/dojo/fx"
+          }
+        ]
       },
       {
-        "id": "12",
-        "name": "fx",
-        "link": "/dojo/fx"
+        "id":"12",
+        "name":"Document",
+        "link":"",
+        "class":"",
+        "children":[
+          {
+            "id": "120",
+            "name": "dom",
+            "link": "/dojo/dom.md"
+          },
+          {
+            "id": "121",
+            "name": "fx",
+            "link": "/dojo/fx"
+          }
+        ]
       }
     ]
   },
