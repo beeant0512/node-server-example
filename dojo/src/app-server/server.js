@@ -81,15 +81,16 @@ define([
         if (pathname.substring(0, 1) == "/") {
           pathname = pathname.substring(1);
         }
-        var md = request.query.md;
-        md = md.replace(';onlybody=true', "");
-        if (md) {
-          console.log("read md file:",path.join(__dirname, 'markdown', request.path + '.md'));
-          var mdFile = fs.read(path.join(__dirname, 'markdown', request.path + '.md'));
-          console.log(mdFile);
-          var html = markdown.makeHtml(mdFile);
-          response.send(html)
-          response.end();
+        pathname = pathname.replace(';onlybody=true', "");
+        if (pathname.indexOf('.md') == pathname.length - 3) {
+          var file = path.join(__dirname, 'markdown', pathname);
+          console.log("read md file:", file);
+          fs.readFile(file, 'utf8', function (err, data) {
+            if (err) throw err;
+            var fileContent = markdown.markdown.toHTML(data);
+            response.send(fileContent);
+            response.end();
+          });
         } else {
           response.render(pathname, request.query);
         }
