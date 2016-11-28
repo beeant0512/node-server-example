@@ -10,14 +10,15 @@ define([
   'dojo/node!serve-favicon',
   'dojo/node!serve-static',
   'dojo/node!juicer',
-  'dojo/node!markdown',
+  'dojo/node!marked',
+  'dojo/node!highlight',
   'dojo/node!stylus',
   'dojo/node!nib',
   'dojo/node!express-ejs-layouts',
   'dojo/node!colors',
   'app-server/config'
-], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, markdown,
-             stylus, nib, expressEjs, colors, config) {
+], function (fs, http, path, express, compress, morgan, cookieParser, cookieSession, favicon, serveStatic, juicer, marked,
+             highlightjs, stylus, nib, expressEjs, colors, config) {
   /* Express Application */
   var app = express(),
     appPort = process.env.PORT || config.port || 8002,
@@ -87,7 +88,12 @@ define([
           console.log("read md file:", file);
           fs.readFile(file, 'utf8', function (err, data) {
             if (err) throw err;
-            var fileContent = markdown.markdown.toHTML(data);
+            marked.setOptions({
+              highlight: function (code) {
+                return highlightjs.highlight(code).value;
+              }
+            });
+            var fileContent = marked(data);
             response.send(fileContent);
             response.end();
           });
