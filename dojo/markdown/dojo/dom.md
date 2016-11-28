@@ -68,4 +68,3 @@ require(["dojo/dom"], function(dom){
     if(dom.isDescendant("bar", "foo")){ ... }
 });  
 ````
-````
